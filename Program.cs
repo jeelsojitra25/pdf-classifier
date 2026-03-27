@@ -362,7 +362,7 @@ namespace PDFClassifier
             for (int i = 0; i < pdfFiles.Length; i++)
             {
                 string pdfPath = pdfFiles[i];
-                string fileName = Path.GetFileName(pdfPath);
+                string fileName = System.IO.Path.GetFileName(pdfPath);
                 Console.Write($"  [{i + 1}/{pdfFiles.Length}] {fileName}");
 
                 try
@@ -443,9 +443,9 @@ namespace PDFClassifier
                         categoryCounts[category] = 0;
                     categoryCounts[category]++;
 
-                    string baseName = Path.GetFileNameWithoutExtension(pdfPath);
+                    string baseName = System.IO.Path.GetFileNameWithoutExtension(pdfPath);
                     string outFileName = $"{baseName}_p{page:D4}.pdf";
-                    string outPath = Path.Combine(outputFolder, category, outFileName);
+                    string outPath = System.IO.Path.Combine(outputFolder, category, outFileName);
 
                     var result = new ClassificationResult
                     {
@@ -488,14 +488,14 @@ namespace PDFClassifier
         {
             Directory.CreateDirectory(outputFolder);
             foreach (var docType in documentTypes)
-                Directory.CreateDirectory(Path.Combine(outputFolder, docType.FolderName));
-            Directory.CreateDirectory(Path.Combine(outputFolder, "Unknown"));
+                Directory.CreateDirectory(System.IO.Path.Combine(outputFolder, docType.FolderName));
+            Directory.CreateDirectory(System.IO.Path.Combine(outputFolder, "Unknown"));
         }
 
         static void WriteReport(List<ClassificationResult> results, string outputFolder)
         {
             // CSV report
-            string csvPath = Path.Combine(outputFolder, "_classification_report.csv");
+            string csvPath = System.IO.Path.Combine(outputFolder, "_classification_report.csv");
             using (var writer = new StreamWriter(csvPath, false, Encoding.UTF8))
             {
                 writer.WriteLine("Source PDF,Page,Category,Score,Text Preview");
@@ -508,7 +508,7 @@ namespace PDFClassifier
             }
 
             // Summary
-            string summaryPath = Path.Combine(outputFolder, "_summary.txt");
+            string summaryPath = System.IO.Path.Combine(outputFolder, "_summary.txt");
             using (var writer = new StreamWriter(summaryPath, false, Encoding.UTF8))
             {
                 writer.WriteLine("Manitoba School Records — Classification Summary");
@@ -532,7 +532,7 @@ namespace PDFClassifier
                     writer.WriteLine();
                     writer.WriteLine($"LOW CONFIDENCE ({lowConf.Count}) — Review these:");
                     foreach (var r in lowConf.Take(50))
-                        writer.WriteLine($"  {Path.GetFileName(r.SourcePdf)} p{r.PageNumber} -> {r.Category} (score: {r.Confidence:F1})");
+                        writer.WriteLine($"  {System.IO.Path.GetFileName(r.SourcePdf)} p{r.PageNumber} -> {r.Category} (score: {r.Confidence:F1})");
                 }
             }
 
